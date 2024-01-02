@@ -32,7 +32,7 @@ set(library_name ${PROJECT_NAME})
 
 #Add library
 add_library(${library_name} SHARED 
-  src/pressure_to_depth_node.cpp
+  src/pressure_to_depth.cpp
   src/imu_ned_enu.cpp
 )
 
@@ -44,11 +44,11 @@ ament_target_dependencies(
 )
 
 #Add exe
-add_executable(pressure_to_depth_node src/pressure_to_depth_node_main.cpp)
+add_executable(pressure_to_depth_node src/pressure_to_depth_node.cpp)
 target_link_libraries(pressure_to_depth_node ${library_name})
 ament_target_dependencies(pressure_to_depth_node ${dependencies})
 
-add_executable(imu_ned_enu_node src/imu_ned_enu_node_main.cpp)
+add_executable(imu_ned_enu_node src/imu_ned_enu_node.cpp)
 target_link_libraries(imu_ned_enu_node ${library_name})
 ament_target_dependencies(imu_ned_enu_node ${dependencies})
 

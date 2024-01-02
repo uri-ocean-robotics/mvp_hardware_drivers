@@ -3,8 +3,8 @@
 
 */
 
-#ifndef PRESSURE_TO_DEPTH_NODE_HPP_
-#define PRESSURE_TO_DEPTH_NODE_HPP_
+#ifndef PRESSURE_TO_DEPTH_HPP_
+#define PRESSURE_TO_DEPTH_HPP_
 
 
 #include "rclcpp/rclcpp.hpp"
