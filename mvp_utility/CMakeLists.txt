@@ -9,15 +9,54 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+
+
+set(dependencies
+  rclcpp
+  std_msgs
+  geometry_msgs
+  sensor_msgs
+)
+
+include_directories(include)
+set(library_name ${PROJECT_NAME})
+
+#Add library
+add_library(${library_name} SHARED src/pressure_to_depth_node.cpp)
+ament_target_dependencies(${library_name} ${dependencies})
+#Add exe
+add_executable(pressure_to_depth_node src/pressure_to_depth_node_main.cpp)
+target_link_libraries(pressure_to_depth_node ${library_name})
+ament_target_dependencies(pressure_to_depth_node ${dependencies})
+
+install(TARGETS pressure_to_depth_node ${library_name}
+ARCHIVE DESTINATION lib
+LIBRARY DESTINATION lib
+RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY include/
+DESTINATION include/
+)
+
+
+
+ament_export_include_directories(include)
+ament_export_libraries(${library_name})
+ament_export_dependencies(${dependencies})
+
 
 # ament_export_include_directories(include)
 ament_export_libraries(${library_name})
 ament_export_dependencies(${dependencies})
 
 ##launch files
-# install(DIRECTORY
-#   launch
-#   DESTINATION share/${PROJECT_NAME}/
-# )
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+
 
 ament_package()
