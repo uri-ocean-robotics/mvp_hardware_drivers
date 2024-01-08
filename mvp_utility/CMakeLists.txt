@@ -53,7 +53,6 @@ target_link_libraries(imu_ned_enu_node ${library_name})
 ament_target_dependencies(imu_ned_enu_node ${dependencies})
 
 
-
 install(TARGETS pressure_to_depth_node ${library_name}
 ARCHIVE DESTINATION lib
 LIBRARY DESTINATION lib
@@ -66,10 +65,10 @@ LIBRARY DESTINATION lib
 RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
+
 install(DIRECTORY include/
 DESTINATION include/
 )
-
 
 
 ament_export_include_directories(include)
@@ -84,6 +83,7 @@ ament_export_dependencies(${dependencies})
 ##launch files
 install(DIRECTORY
   launch
+  config
   DESTINATION share/${PROJECT_NAME}/
 )
 
