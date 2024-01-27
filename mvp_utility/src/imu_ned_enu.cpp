@@ -7,10 +7,14 @@
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2/LinearMath/Transform.h"
 #include "tf2/LinearMath/Vector3.h"
+#include <chrono>
+#include <functional>
+#include <memory>
 
 using std::placeholders::_1;
 using std::placeholders::_2;
 using std::placeholders::_3;
+using namespace std::chrono_literals;
 
 IMUNedEnu::IMUNedEnu(std::string name) : Node(name)
 {
@@ -34,6 +38,9 @@ IMUNedEnu::IMUNedEnu(std::string name) : Node(name)
 
     this->get_parameter("frame_id",m_frame_id);
 
+    // tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+    // tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+
     //topic with namespace
     m_imu_out = this->create_publisher<sensor_msgs::msg::Imu>("imu_out/data", 10);
     //topci without namespace
@@ -45,6 +52,25 @@ IMUNedEnu::IMUNedEnu(std::string name) : Node(name)
 
 void IMUNedEnu::f_imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
+    // geometry_msgs::msg::TransformStamped t;
+    // rclcpp::Time now = this->get_clock()->now();
+
+    // std::string fromFrameRel = "mvp2_test_robot/cg_link";
+    // std::string toFrameRel = "mvp2_test_robot/world_ned";
+
+    // try {
+    //     t = tf_buffer_->lookupTransform(
+    //     toFrameRel, fromFrameRel,
+    //     tf2::TimePointZero,
+    //     10ms
+    //     );
+    // } catch (const tf2::TransformException & ex) {
+    //     RCLCPP_INFO(
+    //     this->get_logger(), "Could not transform %s to %s: %s",
+    //     toFrameRel.c_str(), fromFrameRel.c_str(), ex.what());
+    //     return;
+    // }
+
      tf2::Quaternion q(
         msg->orientation.x,
         msg->orientation.y,
