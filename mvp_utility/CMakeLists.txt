@@ -28,6 +28,7 @@ set(dependencies
 include_directories(include
   ${EIGEN3_INCLUDE_DIR}
 )
+
 set(library_name ${PROJECT_NAME})
 
 #Add library
@@ -72,11 +73,6 @@ DESTINATION include/
 
 
 ament_export_include_directories(include)
-ament_export_libraries(${library_name})
-ament_export_dependencies(${dependencies})
-
-
-# ament_export_include_directories(include)
 ament_export_libraries(${library_name})
 ament_export_dependencies(${dependencies})
 
