@@ -9,41 +9,43 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float64.hpp"
-#include "string"
-#include "vector"
-#include "yaml-cpp/yaml.h"
+#include <string>
+#include <vector>
+#include "PCA9685.h"
+#include <stdint.h>
 
 class PwmDriver : public rclcpp::Node
 {
     public:
         PwmDriver(std::string name = "pwm_driver");
-        
-        //this function parse the YAML file for PWM configuration
-        bool f_load_configuration();
-
-        //this function will check if PWM chip is available on i2c bus
-
-        bool f_check_pwm_ic();
-
-        //this will set the pwm signal based on the topics
-        void f_set_pwm();
-        
 
     
     private:
         std::vector<rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr> thruster_sub;
         std::vector<rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr> servo_sub;
+        
+        //thruster params
+        int m_thruster_num;
+        std::vector<std::string> m_thruster_ch_list;
+        std::vector<std::string> m_thruster_topic_list;
+        std::vector<double> m_thruster_min_us;
+        std::vector<double> m_thruster_max_us;
 
-        std::string m_config_file;
-        
         struct thruster_t{
+            int index;
             int channel;
-            int min_pwm;
-            int max_pwm;
             std::string topic_name;
+            int min_us;
+            int max_us;
+            rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr sub_;
         };
+        std::vector<thruster_t> thrusters;
         
+        void f_thruster_callback(const std_msgs::msg::Float64::SharedPtr msg, int i); 
+
+        ///servos
         struct servo_t{
+            int index;
             int channel;
             int min_pwm;
             int max_pwm;
@@ -51,8 +53,10 @@ class PwmDriver : public rclcpp::Node
             std::string joint_name;
         };
 
-        std::vector<thruster_t> thrusters;
+        
         std::vector<servo_t> servos;
+
+        PCA9685 pca{};
 };
 
 

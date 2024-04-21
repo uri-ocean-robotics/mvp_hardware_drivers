@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(mvp_drivers)
+project(mvp_driver)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -25,7 +25,9 @@ set(library_name ${PROJECT_NAME})
 
 #Add library
 add_library(${library_name} SHARED 
-  src/pwm_driver.cpp
+  include/mvp_driver/pwm_driver.cpp
+  include/mvp_driver/PCA9685.cpp
+  include/mvp_driver/I2CPeripheral.cpp
 )
 
 ament_target_dependencies(
@@ -35,7 +37,7 @@ ament_target_dependencies(
 
 #Add exe
 add_executable(pwm_driver_node src/pwm_driver_node.cpp)
-target_link_libraries(pwm_driver_node ${library_name} yaml-cpp)
+target_link_libraries(pwm_driver_node ${library_name} i2c)
 ament_target_dependencies(pwm_driver_node ${dependencies})
 
 

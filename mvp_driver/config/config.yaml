@@ -1,0 +1,8 @@
+/pwm_driver:
+  ros__parameters:
+    thruster_num: 4
+    thruster_ch_list: [1,2,3,4]
+    thruster_topic_list: [thruster_a, thruster_b, thruster_c, thruster_d]
+    thruster_min_us: [1400, 1400, 1400, 1400]
+    thruster_max_us: [2000, 2000, 2000, 2000]
+
