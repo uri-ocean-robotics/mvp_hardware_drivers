@@ -25,6 +25,7 @@ private:
     
     // Default frequency pulled from PCA9685 datasheet.
     double frequency = 200.0;
+    int prescale_set;
 
 };
 

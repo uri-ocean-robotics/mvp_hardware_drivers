@@ -6,10 +6,10 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    param_path = os.path.join(get_package_share_directory("mvp_driver"), 'config/config.yaml')
+    param_path = os.path.join(get_package_share_directory("pwm_driver"), 'config/config.yaml')
     return LaunchDescription([
         Node(
-            package='mvp_drivers',
+            package='pwm_driver',
             namespace='test_robot',
             executable='pwm_driver_node',
             name='pwm_driver_node',

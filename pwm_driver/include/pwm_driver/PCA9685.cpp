@@ -1,4 +1,4 @@
-#include "mvp_driver/PCA9685.h"
+#include "pwm_driver/PCA9685.h"
 #include <unistd.h>
 #include <cmath>
 #include "Constants.h"
@@ -27,9 +27,8 @@ void PCA9685::set_pwm_freq(const double freq_hz) {
   prescaleval /= 4096.0; //       # 12-bit
   prescaleval /= freq_hz;
   prescaleval -= 1.0;
-
   auto prescale = static_cast<int>(std::round(prescaleval));
-
+  prescale_set = prescale;
   const auto oldmode = i2c_dev->ReadRegisterByte(MODE1);
 
   auto newmode = (oldmode & 0x7F) | SLEEP;
@@ -58,7 +57,7 @@ void PCA9685::set_all_pwm(const uint16_t on, const uint16_t off) {
 
 void PCA9685::set_pwm_ms(const int channel, const double ms) {
   auto period_ms = 1000.0 / frequency;
-  auto bits_per_ms = 4096 / period_ms;
+  auto bits_per_ms = (4096) / period_ms;
   auto bits = ms * bits_per_ms;
   set_pwm(channel, 0, bits);
 }

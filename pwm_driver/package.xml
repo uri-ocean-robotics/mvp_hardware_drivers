@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>mvp_driver</name>
+  <name>pwm_driver</name>
   <version>0.0.0</version>
-  <description>mvp_drivers description</description>
+  <description>pwm_driver description</description>
   <maintainer email="mingxi@todo.todo">mingxi</maintainer>
   <license>TODO: License declaration</license>
 

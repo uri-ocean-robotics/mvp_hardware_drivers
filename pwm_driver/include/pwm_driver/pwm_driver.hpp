@@ -17,20 +17,12 @@
 class PwmDriver : public rclcpp::Node
 {
     public:
-        PwmDriver(std::string name = "pwm_driver");
+        PwmDriver(std::string name = "pwm_driver_node");
 
     
     private:
-        std::vector<rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr> thruster_sub;
-        std::vector<rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr> servo_sub;
+        double m_pwm_ms_bias;
         
-        //thruster params
-        int m_thruster_num;
-        std::vector<std::string> m_thruster_ch_list;
-        std::vector<std::string> m_thruster_topic_list;
-        std::vector<double> m_thruster_min_us;
-        std::vector<double> m_thruster_max_us;
-
         struct thruster_t{
             int index;
             int channel;
