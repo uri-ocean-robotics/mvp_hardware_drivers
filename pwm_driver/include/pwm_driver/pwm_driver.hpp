@@ -44,9 +44,19 @@ class PwmDriver : public rclcpp::Node
             std::string topic_name;
             std::string joint_name;
         };
-
-        
         std::vector<servo_t> servos;
+
+        ///led
+        struct led_t{
+            int index;
+            int channel;
+            std::string topic_name;
+            int min_us;
+            int max_us;
+            rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr sub_;
+        };
+        std::vector<led_t> leds;
+        void f_led_callback(const std_msgs::msg::Float64::SharedPtr msg, int i); 
 
         PCA9685 pca{};
 };
