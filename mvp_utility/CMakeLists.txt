@@ -1,87 +1,75 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.0.2)
 project(mvp_utility)
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+## Compile as C++11, supported in ROS Kinetic and newer
+add_compile_options(-std=c++11)
 
-# find dependencies
-find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(Eigen3 REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_ros REQUIRED)
-find_package(tf2_eigen REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
-
-
-set(dependencies
-  rclcpp
+## Find catkin macros and libraries
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
   std_msgs
   geometry_msgs
   sensor_msgs
+  tf2
+  tf2_ros
+  tf2_geometry_msgs
 )
 
-include_directories(include
+## Find Eigen3
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+
+catkin_package(
+  INCLUDE_DIRS include ${EIGEN3_INCLUDE_DIR}
+  LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS roscpp std_msgs geometry_msgs sensor_msgs tf2 tf2_ros tf2_geometry_msgs
+  DEPENDS Eigen3
+)
+
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
 )
 
-set(library_name ${PROJECT_NAME})
-
-#Add library
-add_library(${library_name} SHARED 
+## Declare a C++ library
+add_library(${PROJECT_NAME}
   src/pressure_to_depth.cpp
   src/imu_ned_enu.cpp
 )
 
-ament_target_dependencies(
-  ${library_name} 
-  ${dependencies} 
-  tf2
-  tf2_ros
-)
+## Add cmake target dependencies of the library
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-#Add exe
+## Declare executables
 add_executable(pressure_to_depth_node src/pressure_to_depth_node.cpp)
-target_link_libraries(pressure_to_depth_node ${library_name})
-ament_target_dependencies(pressure_to_depth_node ${dependencies})
+target_link_libraries(pressure_to_depth_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+add_dependencies(pressure_to_depth_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 add_executable(imu_ned_enu_node src/imu_ned_enu_node.cpp)
-target_link_libraries(imu_ned_enu_node ${library_name})
-ament_target_dependencies(imu_ned_enu_node ${dependencies})
+target_link_libraries(imu_ned_enu_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+add_dependencies(imu_ned_enu_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+## Mark executable scripts (Python etc.) for installation
+# Remove or comment out the following block if you don't have any Python scripts to install
+# catkin_install_python(PROGRAMS
+#   scripts/my_python_script
+#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
 
-install(TARGETS pressure_to_depth_node ${library_name}
-ARCHIVE DESTINATION lib
-LIBRARY DESTINATION lib
-RUNTIME DESTINATION lib/${PROJECT_NAME}
+## Mark executables and/or libraries for installation
+install(TARGETS pressure_to_depth_node imu_ned_enu_node ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
-install(TARGETS imu_ned_enu_node ${library_name}
-ARCHIVE DESTINATION lib
-LIBRARY DESTINATION lib
-RUNTIME DESTINATION lib/${PROJECT_NAME}
+## Mark cpp header files for installation
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
-
-install(DIRECTORY include/
-DESTINATION include/
+## Mark other files for installation
+install(DIRECTORY launch config
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
-
-
-ament_export_include_directories(include)
-ament_export_libraries(${library_name})
-ament_export_dependencies(${dependencies})
-
-##launch files
-install(DIRECTORY
-  launch
-  config
-  DESTINATION share/${PROJECT_NAME}/
-)
-
-
-ament_package()

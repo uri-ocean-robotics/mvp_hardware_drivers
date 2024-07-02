@@ -1,16 +1,14 @@
-
-#include "rclcpp/rclcpp.hpp"
-
+#include "ros/ros.h"
 #include "mvp_utility/pressure_to_depth.hpp"
 
-int main(int argc, char ** argv)
+int main(int argc, char **argv)
 {
-  rclcpp::init(argc, argv);
+    ros::init(argc, argv, "pressure_to_depth_node");
 
-  std::shared_ptr<PressureToDepthNode> node = std::make_shared<PressureToDepthNode>();
+    ros::NodeHandle nh;
+    PressureToDepthNode node(nh);
 
-  rclcpp::spin(node);
+    ros::spin();
 
-  rclcpp::shutdown();
-  return 0;
+    return 0;
 }

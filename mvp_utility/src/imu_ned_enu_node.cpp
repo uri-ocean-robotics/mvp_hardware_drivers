@@ -1,16 +1,14 @@
-
-#include "rclcpp/rclcpp.hpp"
-
+#include "ros/ros.h"
 #include "mvp_utility/imu_ned_enu.hpp"
 
-int main(int argc, char ** argv)
+int main(int argc, char **argv)
 {
-  rclcpp::init(argc, argv);
+    ros::init(argc, argv, "imu_ned_to_enu_node");
 
-  std::shared_ptr<IMUNedEnu> node = std::make_shared<IMUNedEnu>();
+    ros::NodeHandle nh;
+    IMUNedEnu node(nh);
 
-  rclcpp::spin(node);
+    ros::spin();
 
-  rclcpp::shutdown();
-  return 0;
+    return 0;
 }

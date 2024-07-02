@@ -1,28 +1,25 @@
 /*
     This node converts pressure reading into pose with covariance stamped message for robot localization
-
 */
 
 #ifndef PRESSURE_TO_DEPTH_HPP_
 #define PRESSURE_TO_DEPTH_HPP_
 
-
-#include "rclcpp/rclcpp.hpp"
+#include "ros/ros.h"
 #include <string>
 
-#include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
-#include "sensor_msgs/msg/fluid_pressure.hpp"
+#include "geometry_msgs/PoseWithCovarianceStamped.h"
+#include "sensor_msgs/FluidPressure.h"
 
-
-class PressureToDepthNode : public rclcpp::Node
+class PressureToDepthNode
 {
     public:
-        PressureToDepthNode(std::string name = "pressure_to_depth_node");
+        PressureToDepthNode(ros::NodeHandle& nh, std::string name = "pressure_to_depth_node");
     
     private:
-        rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr _publisher;
-        rclcpp::Subscription<sensor_msgs::msg::FluidPressure>::SharedPtr _subscriber;
-        void f_pressure_callback(const sensor_msgs::msg::FluidPressure::SharedPtr msg);
+        ros::Publisher _publisher;
+        ros::Subscriber _subscriber;
+        void f_pressure_callback(const sensor_msgs::FluidPressure::ConstPtr& msg);
         std::string m_frame_id;
         float m_fluid_density;
 };
