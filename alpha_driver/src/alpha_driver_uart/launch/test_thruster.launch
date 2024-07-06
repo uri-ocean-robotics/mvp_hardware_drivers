@@ -1,0 +1,30 @@
+<launch>
+
+  <arg name="robot_name" default="changeme"/>
+
+  <!-- start joystick -->
+  <node name="joy_node" pkg="joy" type="joy_node">
+  </node>
+
+  <!-- start pwm command generation -->
+  <node ns="$(arg robot_name)" name="test_thruster_node" pkg="alpha_driver_uart" 
+        type="test_thruster_node" output="screen">
+
+        <param name="factor_joy0" value="0.5" type="double" />
+        <param name="factor_joy1" value="0.5" type="double" />
+        <param name="factor_joy2" value="0.5" type="double" />
+        <param name="factor_joy3" value="0.5" type="double" />
+
+        <remap from="joy_axes0" to="control/pwm_chan0" />
+        <remap from="joy_axes1" to="control/pwm_chan1" />
+        <remap from="joy_axes2" to="control/pwm_chan2" />
+        <remap from="joy_axes3" to="control/pwm_chan3" />
+  </node>
+
+  <!-- send the pwm to pico -->
+  <node ns="$(arg robot_name)" pkg="alpha_driver_uart" type="alpha_driver_uart_node" 
+        name="alpha_driver_uart_node" output="screen">
+      <rosparam command="load" file="$(find alpha_driver_uart)/config/config.yaml"/>
+  </node>
+
+</launch>
