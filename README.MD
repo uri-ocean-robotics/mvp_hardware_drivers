@@ -1,3 +1,2 @@
 ## MVP related utlitity files and ros node
-
-This is ROS1 version of https://github.com/GSO-soslab/mvp_core
+This repository has all the hardware drivers for the AUVs using mvp framework
