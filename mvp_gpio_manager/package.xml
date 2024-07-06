@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>alpha_gpio_manager</name>
+  <name>mvp_gpio_manager</name>
   <version>0.0.0</version>
-  <description>The alpha_gpio_manager package</description>
+  <description>The mvp_gpio_manager package</description>
 
   <author email="mzhou@uri.edu">Mingxi Zhou</author>
   <maintainer email="mzhou@uri.edu">Mingxi Zhou</maintainer>
