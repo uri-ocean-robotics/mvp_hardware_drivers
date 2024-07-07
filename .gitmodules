@@ -1,0 +1,40 @@
+[submodule "external/blueprint_oculus_sonar"]
+	path = external/blueprint_oculus_sonar
+	url = https://github.com/GSO-soslab/blueprint_oculus_sonar
+	branch = main
+[submodule "external/bluerobotics_ping360"]
+	path = external/bluerobotics_ping360
+	url = https://github.com/GSO-soslab/bluerobotics_ping360
+	branch = main
+[submodule "external/bluerobotics_pressure"]
+	path = external/bluerobotics_pressure
+	url = https://github.com/GSO-soslab/bluerobotics_pressure
+	branch = main
+[submodule "external/flir_camera_driver"]
+	path = external/flir_camera_driver
+	url = https://github.com/GSO-soslab/flir_camera_driver
+	branch = main
+[submodule "external/nucleus_driver"]
+	path = external/nucleus_driver
+	url = https://github.com/GSO-soslab/nucleus_driver
+	branch = noetic-devel
+[submodule "external/power_monitor"]
+	path = external/power_monitor
+	url = https://github.com/GSO-soslab/power_monitor
+	branch = main
+[submodule "external/uno_lqe"]
+	path = external/uno_lqe
+	url = https://github.com/GSO-soslab/uno_lqe
+	branch = master
+[submodule "external/waterlinked_dvl"]
+	path = external/waterlinked_dvl
+	url = https://github.com/uri-ocean-robotics/waterlinked_dvl
+	branch = master
+[submodule "external/xsens_mti_ros_driver"]
+	path = external/xsens_mti_ros_driver
+	url = https://github.com/GSO-soslab/xsens_mti_ros_driver
+	branch = master
+[submodule "external/ROS_MSCL"]
+	path = external/ROS_MSCL
+	url = https://github.com/GSO-soslab/ROS_MSCL
+	branch = main
