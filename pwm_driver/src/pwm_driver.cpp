@@ -93,6 +93,7 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
     pnh_.getParam("servo_center_us", m_servo_center_us);
 
     // Declare subscriptions for thrusters
+    ROS_INFO("### Initializing Thrusters. number = %d", m_thruster_ch_list.size());
     for (int i = 0; i < m_thruster_ch_list.size(); i++)
     {
         thruster_t t;
@@ -108,6 +109,7 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
         sleep(1);
         thrusters.push_back(t);
     }
+    ROS_INFO("### Thrusters PWM initialization finished", m_thruster_ch_list.size());
 
     // Declare subscriptions for LEDs
     for (int i = 0; i < m_led_ch_list.size(); i++)
