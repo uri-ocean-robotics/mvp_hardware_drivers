@@ -5,7 +5,8 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "pwm_driver_node");
     ros::NodeHandle nh;
-    PwmDriver pwm_driver(nh);
+    ros::NodeHandle pnh("~");
+    PwmDriver pwm_driver(nh, pnh);
     ros::spin();
     return 0;
 }
