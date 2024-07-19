@@ -16,16 +16,19 @@
 class PwmDriver
 {
 public:
-    PwmDriver(ros::NodeHandle& nh);
+    PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh);
     ~PwmDriver();
 
 private:
     ros::NodeHandle nh_; 
+    ros::NodeHandle pnh_;
     double m_pwm_ms_bias;
 
     ros::Timer safety_timer_;  // Timer to check for command updates
     ros::Duration timeout_duration_;  // Duration after which to set PWM to neutral
-    ros::Time last_command_time_;  // Time when the last command was received
+
+    double m_no_cmd_timeout;
+    double last_command_time_;
     void safety_check(const ros::TimerEvent& event);  // Function to check for command updates
 
     struct thruster_t
