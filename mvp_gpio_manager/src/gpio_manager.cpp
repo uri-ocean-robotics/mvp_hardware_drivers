@@ -195,7 +195,8 @@ bool GPIOManager::f_cb_srv_get_state(
                         std_srvs::Trigger::Request &req,
                         std_srvs::Trigger::Response &res)
 {
-    std::string msg = "#GPIO Manager#";
+    //std::string msg = "#GPIO Manager#";
+    std::string msg= "";
 
     for (int i=0; i<m_gpio_count; i++)
     {
