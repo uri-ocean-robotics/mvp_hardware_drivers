@@ -38,3 +38,7 @@
 	path = external/ROS_MSCL
 	url = https://github.com/GSO-soslab/ROS_MSCL
 	branch = main
+[submodule "external/microstrain_inertial"]
+	path = external/microstrain_inertial
+	url = https://github.com/GSO-soslab/microstrain_inertial
+	branch = ros
