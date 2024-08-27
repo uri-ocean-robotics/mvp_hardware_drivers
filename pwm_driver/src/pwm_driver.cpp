@@ -58,6 +58,7 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
     std::vector<int> m_thruster_min_us;
     std::vector<int> m_thruster_max_us;
     std::vector<int> m_thruster_init_us;
+    std::vector<int> m_thruster_direction((6, 0));
 
     // nh_.param("thruster_num", m_thruster_num, 8);
     pnh_.getParam("thruster_ch_list", m_thruster_ch_list);
@@ -65,6 +66,7 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
     pnh_.getParam("thruster_min_us", m_thruster_min_us);
     pnh_.getParam("thruster_max_us", m_thruster_max_us);
     pnh_.getParam("thruster_init_us", m_thruster_init_us);
+    pnh_.getParam("thruster_direction", m_thruster_direction);
 
     // LED params
     std::vector<int> m_led_ch_list;
@@ -102,6 +104,7 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
         t.topic_name = m_thruster_topic_list[i];
         t.min_us = m_thruster_min_us[i];
         t.max_us = m_thruster_max_us[i];
+        t.direction = m_thruster_direction[i];
         thruster_subs_.push_back(nh_.subscribe<std_msgs::Float64>(t.topic_name, 10, boost::bind(&PwmDriver::f_thruster_callback, this, _1, i)));
         pca.set_pwm_ms(t.channel, 0);
         sleep(1);
@@ -179,7 +182,7 @@ void PwmDriver::f_thruster_callback(const std_msgs::Float64::ConstPtr& msg, int 
     {
         float a = (thrusters[i].max_us - thrusters[i].min_us) / 2.0;
         float b = (thrusters[i].max_us + thrusters[i].min_us) / 2.0;
-        double u = (a * msg->data + b) / 1000.0 + m_pwm_ms_bias;
+        double u = (a * thrusters[i].direction*msg->data + b) / 1000.0 + m_pwm_ms_bias;
         // printf("ch=%d, pwm=%lf\r\n", thrusters[i].channel, u - m_pwm_ms_bias);
         pca.set_pwm_ms(thrusters[i].channel, u);
         last_command_time_ = ros::Time::now().toSec();  // Update the last command time
