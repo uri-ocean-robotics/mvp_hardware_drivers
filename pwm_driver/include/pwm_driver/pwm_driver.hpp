@@ -38,6 +38,7 @@ private:
         std::string topic_name;
         int min_us;
         int max_us;
+        int direction;
         ros::Subscriber sub_;
     };
     std::vector<thruster_t> thrusters;
