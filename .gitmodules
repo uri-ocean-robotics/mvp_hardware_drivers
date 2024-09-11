@@ -30,10 +30,6 @@
 	path = external/waterlinked_dvl
 	url = https://github.com/uri-ocean-robotics/waterlinked_dvl
 	branch = master
-[submodule "external/xsens_mti_ros_driver"]
-	path = external/xsens_mti_ros_driver
-	url = https://github.com/GSO-soslab/xsens_mti_ros_driver
-	branch = master
 [submodule "external/science_sensor_drivers"]
 	path = external/science_sensor_drivers
 	url = https://github.com/GSO-soslab/science_sensor_drivers
