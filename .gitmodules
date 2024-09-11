@@ -34,3 +34,7 @@
 	path = external/science_sensor_drivers
 	url = https://github.com/GSO-soslab/science_sensor_drivers
 	branch = noetic-devel
+[submodule "external/Xsens_MTi_ROS_Driver_and_Ntrip_Client"]
+	path = external/Xsens_MTi_ROS_Driver_and_Ntrip_Client
+	url = https://github.com/GSO-soslab/Xsens_MTi_ROS_Driver_and_Ntrip_Client
+	branch = main
