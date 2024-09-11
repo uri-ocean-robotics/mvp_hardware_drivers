@@ -10,10 +10,6 @@
 	path = external/bluerobotics_pressure
 	url = https://github.com/GSO-soslab/bluerobotics_pressure
 	branch = main
-[submodule "external/flir_camera_driver"]
-	path = external/flir_camera_driver
-	url = https://github.com/GSO-soslab/flir_camera_driver
-	branch = main
 [submodule "external/nucleus_driver"]
 	path = external/nucleus_driver
 	url = https://github.com/GSO-soslab/nucleus_driver
