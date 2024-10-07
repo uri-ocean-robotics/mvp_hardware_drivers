@@ -35,6 +35,9 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
         return;
     }
 
+    // // Create SIGINT handler
+    // std::signal
+
     // if (ioctl(i2c_file_, I2C_SLAVE, ATTINY85_I2C_ADDRESS) < 0)
     // {
     //     perror("Failed to acquire bus access and/or talk to slave");
@@ -53,11 +56,11 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
 
     // Thruster params
     // int m_thruster_num;
-    std::vector<int> m_thruster_ch_list;
+    // std::vector<int> m_thruster_ch_list;
     std::vector<std::string> m_thruster_topic_list;
     std::vector<int> m_thruster_min_us;
     std::vector<int> m_thruster_max_us;
-    std::vector<int> m_thruster_init_us;
+    // std::vector<int> m_thruster_init_us;
     std::vector<int> m_thruster_direction((6, 0));
 
     // nh_.param("thruster_num", m_thruster_num, 8);
@@ -151,9 +154,14 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
 PwmDriver::~PwmDriver()
 {
     running_ = false;
-    if (heartbeat_thread_.joinable())
+
+    // Set all used pwm channel to initial value on exit
+    for (int i = 0; i < m_thruster_ch_list.size(); i++)
     {
-        heartbeat_thread_.join();
+        thruster_t t;
+        t.index = i;
+        t.channel = m_thruster_ch_list[i];
+        pca.set_pwm_ms(t.channel, m_thruster_init_us[i] / 1000.0 + m_pwm_ms_bias);
     }
     close(i2c_file_);
 }

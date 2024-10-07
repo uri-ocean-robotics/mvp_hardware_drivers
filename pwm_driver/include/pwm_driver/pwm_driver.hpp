@@ -29,6 +29,8 @@ private:
 
     double m_no_cmd_timeout;
     double last_command_time_;
+    std::vector<int> m_thruster_ch_list;
+    std::vector<int> m_thruster_init_us;
     void safety_check(const ros::TimerEvent& event);  // Function to check for command updates
 
     struct thruster_t
