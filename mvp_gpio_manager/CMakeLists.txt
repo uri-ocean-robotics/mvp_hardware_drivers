@@ -1,57 +1,64 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.8)
 project(mvp_gpio_manager)
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
+
+set(dependencies
+  rclcpp
   std_msgs
   std_srvs
 )
 
-
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES alpha_localization
-#  CATKIN_DEPENDS robot_localization
-#  DEPENDS system_lib
-)
-
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
 include_directories(
-  ${catkin_INCLUDE_DIRS}
+)
+set(library_name ${PROJECT_NAME})
+
+add_library(${library_name} SHARED 
+  src/gpio_manager.cpp
 )
 
-## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/alpha_localization.cpp
-# )
+ament_target_dependencies(
+  ${library_name} 
+  ${dependencies} 
+)
 
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Declare a C++ executable
-## With catkin_make all packages are built within a single CMake context
-## The recommended prefix ensures that target names across packages don't collide
 add_executable(gpio_manager_node src/gpio_manager.cpp)
+target_link_libraries(gpio_manager_node ${library_name} -lwiringPi)
+ament_target_dependencies(gpio_manager_node ${dependencies})
 
-## Rename C++ executable without prefix
-## The above recommended prefix causes long target names, the following renames the
-## target back to the shorter version for ease of user use
-## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
-# set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
-
-## Add cmake target dependencies of the executable
-## same as for the library above
-add_dependencies(gpio_manager_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Specify libraries to link a library or executable target against
-target_link_libraries(gpio_manager_node
-  ${catkin_LIBRARIES}
-  -lwiringPi
+install(TARGETS gpio_manager_node ${library_name}
+ARCHIVE DESTINATION lib
+LIBRARY DESTINATION lib
+RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
+
+
+ament_export_include_directories(include)
+ament_export_libraries(${library_name})
+ament_export_dependencies(${dependencies})
+
+##launch files
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
+
+install(DIRECTORY 
+  config 
+  DESTINATION share/${PROJECT_NAME}
+)
+
+ament_package()
