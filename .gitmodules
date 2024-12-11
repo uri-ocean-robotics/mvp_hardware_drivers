@@ -46,3 +46,7 @@
 	path = external/nortek_dvl_ethernet
 	url = https://github.com/GSO-soslab/nortek_dvl_ethernet
 	branch = noetic-devel
+[submodule "external/torqeedo_motor"]
+	path = external/torqeedo_motor
+	url = https://github.com/GSO-soslab/torqeedo_motor
+	branch = noetic-devel
