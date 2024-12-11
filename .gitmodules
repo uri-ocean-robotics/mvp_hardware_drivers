@@ -42,3 +42,7 @@
 	path = external/dwe_camera
 	url = https://github.com/GSO-soslab/dwe_camera
 	branch = noetic-devel
+[submodule "external/nortek_dvl_ethernet"]
+	path = external/nortek_dvl_ethernet
+	url = https://github.com/GSO-soslab/nortek_dvl_ethernet
+	branch = noetic-devel
