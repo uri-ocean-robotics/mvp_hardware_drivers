@@ -50,3 +50,7 @@
 	path = external/torqeedo_motor
 	url = https://github.com/GSO-soslab/torqeedo_motor
 	branch = noetic-devel
+[submodule "external/wamv_rf_joy"]
+	path = external/wamv_rf_joy
+	url = https://github.com/GSO-soslab/wamv_rf_joy
+	branch = noetic-devel
