@@ -54,3 +54,7 @@
 	path = external/wamv_rf_joy
 	url = https://github.com/GSO-soslab/wamv_rf_joy
 	branch = noetic-devel
+[submodule "external/unicore_rtk_driver"]
+	path = external/unicore_rtk_driver
+	url = https://github.com/GSO-soslab/unicore_rtk_driver
+	branch = noetic-devel
