@@ -40,12 +40,14 @@ class PwmDriver : public rclcpp::Node
         struct servo_t{
             int index;
             int channel;
-            int min_pwm;
-            int max_pwm;
+            int min_us;
+            int max_us;
+            int center_us;
             std::string topic_name;
-            std::string joint_name;
+            rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr sub_;
         };
         std::vector<servo_t> servos;
+        void f_servo_callback(const std_msgs::msg::Float64::SharedPtr msg, int i);
 
         ///led
         struct led_t{

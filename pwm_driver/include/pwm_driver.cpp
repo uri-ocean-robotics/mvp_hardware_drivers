@@ -84,6 +84,29 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
     this->declare_parameter("led_init_us", m_led_init_us);
     this->get_parameter("led_init_us", m_led_init_us);
 
+
+    //servo params
+    std::vector<long int> m_servo_ch_list;
+    std::vector<std::string> m_servo_topic_list;
+    std::vector<long int> m_servo_min_us;
+    std::vector<long int> m_servo_max_us;
+    std::vector<long int> m_servo_center_us;
+
+    this->declare_parameter("servo_ch_list", m_servo_ch_list);
+    this->get_parameter("servo_ch_list", m_servo_ch_list);
+
+    this->declare_parameter("servo_topic_list", m_servo_topic_list);
+    this->get_parameter("servo_topic_list", m_servo_topic_list);
+
+    this->declare_parameter("servo_min_us", m_servo_min_us);
+    this->get_parameter("servo_min_us", m_servo_min_us);
+
+    this->declare_parameter("servo_max_us", m_servo_max_us);
+    this->get_parameter("servo_max_us", m_servo_max_us);
+
+    this->declare_parameter("servo_center_us", m_servo_center_us);
+    this->get_parameter("servo_center_us", m_servo_center_us);
+
     //declare subscriptions
     for (int i =0; i< (int)m_thruster_ch_list.size(); i++)
     {
@@ -121,6 +144,25 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
         leds.push_back(t);
     }
 
+    // Declare subscriptions for servos
+    for (int i = 0; i < m_servo_ch_list.size(); i++)
+    {
+        servo_t t;
+        t.index = i;
+        t.channel = m_servo_ch_list[i];
+        t.topic_name = m_servo_topic_list[i];
+        t.min_us = m_servo_min_us[i];
+        t.max_us = m_servo_max_us[i];
+        t.center_us = m_servo_center_us[i];
+        t.sub_ = this->create_subscription<std_msgs::msg::Float64>(t.topic_name, 
+                                                                    10, 
+                                                                   [this, i](const std_msgs::msg::Float64::SharedPtr msg){
+                                                                    this->f_servo_callback(msg, i);
+                                                                    }
+                                                                    );
+        pca.set_pwm_ms(t.channel, t.center_us / 1000.0 + m_pwm_ms_bias);
+        servos.push_back(t);
+    }
 
 }
 
@@ -177,6 +219,25 @@ void PwmDriver::f_led_callback(const std_msgs::msg::Float64::SharedPtr msg, int 
     // printf("ch=%d, pwm=%lf\r\n",leds[i].channel, u-m_pwm_ms_bias);
 
     pca.set_pwm_ms(leds[i].channel, u);
+    }
+    else
+    {
+        printf("input out of range\r\n");
+    }
+
+}
+
+
+void PwmDriver::f_servo_callback(const std_msgs::msg::Float64::SharedPtr msg, int i)
+{
+   //scale it
+    if(msg->data >= -1.0 && msg->data<=1.0)
+    {
+        float a = (servos[i].max_us - servos[i].min_us) / 2.0;
+        float b = (servos[i].max_us + servos[i].min_us) / 2.0;
+        double u = (a * msg->data + b) / 1000.0 + m_pwm_ms_bias;
+        printf("ch=%d, pwm=%lf\r\n", servos[i].channel, u - m_pwm_ms_bias);
+        pca.set_pwm_ms(servos[i].channel, u);
     }
     else
     {
