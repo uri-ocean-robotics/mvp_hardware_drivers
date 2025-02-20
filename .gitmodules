@@ -58,3 +58,7 @@
 	path = external/unicore_rtk_driver
 	url = https://github.com/GSO-soslab/unicore_rtk_driver
 	branch = noetic-devel
+[submodule "external/airmar_weatherstation"]
+	path = external/airmar_weatherstation
+	url = https://github.com/GSO-soslab/airmar_weatherstation
+	branch = noetic-devel
