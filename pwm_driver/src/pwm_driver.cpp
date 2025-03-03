@@ -35,6 +35,9 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
         return;
     }
 
+    // // Create SIGINT handler
+    // std::signal
+
     // if (ioctl(i2c_file_, I2C_SLAVE, ATTINY85_I2C_ADDRESS) < 0)
     // {
     //     perror("Failed to acquire bus access and/or talk to slave");
@@ -53,11 +56,12 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
 
     // Thruster params
     // int m_thruster_num;
-    std::vector<int> m_thruster_ch_list;
+    // std::vector<int> m_thruster_ch_list;
     std::vector<std::string> m_thruster_topic_list;
     std::vector<int> m_thruster_min_us;
     std::vector<int> m_thruster_max_us;
-    std::vector<int> m_thruster_init_us;
+    // std::vector<int> m_thruster_init_us;
+    std::vector<int> m_thruster_direction((6, 0));
 
     // nh_.param("thruster_num", m_thruster_num, 8);
     pnh_.getParam("thruster_ch_list", m_thruster_ch_list);
@@ -65,6 +69,7 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
     pnh_.getParam("thruster_min_us", m_thruster_min_us);
     pnh_.getParam("thruster_max_us", m_thruster_max_us);
     pnh_.getParam("thruster_init_us", m_thruster_init_us);
+    pnh_.getParam("thruster_direction", m_thruster_direction);
 
     // LED params
     std::vector<int> m_led_ch_list;
@@ -102,6 +107,7 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
         t.topic_name = m_thruster_topic_list[i];
         t.min_us = m_thruster_min_us[i];
         t.max_us = m_thruster_max_us[i];
+        t.direction = m_thruster_direction[i];
         thruster_subs_.push_back(nh_.subscribe<std_msgs::Float64>(t.topic_name, 10, boost::bind(&PwmDriver::f_thruster_callback, this, _1, i)));
         pca.set_pwm_ms(t.channel, 0);
         sleep(1);
@@ -148,9 +154,14 @@ PwmDriver::PwmDriver(ros::NodeHandle& nh, ros::NodeHandle& pnh) : nh_(nh), pnh_(
 PwmDriver::~PwmDriver()
 {
     running_ = false;
-    if (heartbeat_thread_.joinable())
+
+    // Set all used pwm channel to initial value on exit
+    for (int i = 0; i < m_thruster_ch_list.size(); i++)
     {
-        heartbeat_thread_.join();
+        thruster_t t;
+        t.index = i;
+        t.channel = m_thruster_ch_list[i];
+        pca.set_pwm_ms(t.channel, m_thruster_init_us[i] / 1000.0 + m_pwm_ms_bias);
     }
     close(i2c_file_);
 }
@@ -179,7 +190,7 @@ void PwmDriver::f_thruster_callback(const std_msgs::Float64::ConstPtr& msg, int 
     {
         float a = (thrusters[i].max_us - thrusters[i].min_us) / 2.0;
         float b = (thrusters[i].max_us + thrusters[i].min_us) / 2.0;
-        double u = (a * msg->data + b) / 1000.0 + m_pwm_ms_bias;
+        double u = (a * thrusters[i].direction*msg->data + b) / 1000.0 + m_pwm_ms_bias;
         // printf("ch=%d, pwm=%lf\r\n", thrusters[i].channel, u - m_pwm_ms_bias);
         pca.set_pwm_ms(thrusters[i].channel, u);
         last_command_time_ = ros::Time::now().toSec();  // Update the last command time
