@@ -30,3 +30,15 @@ This repository has all the hardware drivers for the AUVs using mvp framework
     sudo usermod -G kmem -a $USER
     sudo usermod -G dialout -a $USER
     ```
+
+    - Add udev rules to save the change
+    ```
+    sudo nano /etc/udev/rules.d/99-gpiomem.rules
+
+    KERNEL=="gpiomem", GROUP="gpio", MODE="0660"
+
+    sudo usermod -aG gpio $USER
+
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
+    ```
