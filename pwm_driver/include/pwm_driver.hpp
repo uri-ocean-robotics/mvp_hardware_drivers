@@ -18,7 +18,7 @@ class PwmDriver : public rclcpp::Node
 {
     public:
         PwmDriver(std::string name = "pwm_driver_node");
-        void exit();
+        void onShutdown();
     
     private:
         

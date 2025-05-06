@@ -171,14 +171,18 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
         sleep(1);
     }
 
+    rclcpp::on_shutdown(std::bind(&PwmDriver::onShutdown, this));
+    RCLCPP_INFO(this->get_logger(), "PWM Channels initialization done, motor ready!");
+
 }
 
 
-void PwmDriver::exit()
+void PwmDriver::onShutdown()
 {
     // running_ = false;
 
     // Set all used pwm channel to initial value on exit
+    RCLCPP_INFO(this->get_logger(), "PWM driver shutting down");
     for (int i = 0; i < m_thruster_ch_list.size(); i++)
     {
         thruster_t t;
