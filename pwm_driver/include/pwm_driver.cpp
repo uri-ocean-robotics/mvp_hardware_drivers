@@ -16,6 +16,7 @@ using std::placeholders::_1;
 using std::placeholders::_2;
 using std::placeholders::_3;
 using namespace std::chrono_literals;
+#define ATTINY85_I2C_ADDRESS 0x08
 
 PwmDriver::PwmDriver(std::string name) : Node(name)
 {
@@ -23,6 +24,12 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
     if ((i2c_file_ = open(i2c_filename, O_RDWR)) < 0)
     {
         perror("Failed to open the i2c bus");
+        return;
+    }
+    //check MCU
+    if (ioctl(i2c_file_, I2C_SLAVE, ATTINY85_I2C_ADDRESS) < 0)
+    {
+        perror("Failed to acquire bus access and/or talk to slave");
         return;
     }
 
@@ -33,6 +40,9 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
 
     this->declare_parameter("pwm_ms_bias", m_pwm_ms_bias);
     this->get_parameter("pwm_ms_bias", m_pwm_ms_bias);
+
+    this->declare_parameter("no_pwm_timeout", m_no_cmd_timeout);
+    this->get_parameter("no_pwm_timeout", m_no_cmd_timeout);
 
     pca.set_pwm_freq(m_pwm_frequency);
 
@@ -86,6 +96,7 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
     this->get_parameter("led_init_us", m_led_init_us);
 
 
+    
     //servo params
     std::vector<long int> m_servo_ch_list;
     std::vector<std::string> m_servo_topic_list;
@@ -171,9 +182,20 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
         sleep(1);
     }
 
+
+    //timer for safety check
+    safety_timer_ = this->create_wall_timer(
+        std::chrono::milliseconds(500),
+        std::bind(&PwmDriver::safety_check, this)
+      );
+
+    heart_beat_timer = this->create_wall_timer(
+    std::chrono::milliseconds(1000),
+    std::bind(&PwmDriver::mcu_heartbeat, this)
+    );
     rclcpp::on_shutdown(std::bind(&PwmDriver::onShutdown, this));
     RCLCPP_INFO(this->get_logger(), "PWM Channels initialization done, motor ready!");
-
+    last_command_time_ = this->get_clock()->now().seconds();
 }
 
 
@@ -196,17 +218,18 @@ void PwmDriver::onShutdown()
 void PwmDriver::f_thruster_callback(const std_msgs::msg::Float64::SharedPtr msg, int i)
 {
     //scale it
+    last_command_time_ = this->get_clock()->now().seconds();
     if(msg->data >= -1.0 && msg->data<=1.0)
     {
-    float a = (thrusters[i].max_us - thrusters[i].min_us)/2.0;
-    float b = (thrusters[i].max_us + thrusters[i].min_us)/2.0;
-    //pwm = a *msg->data + b
-    // b= (min+max)/2
-    // a = (max-min)/2
-    double u = (a * msg->data + b)/1000.0 + m_pwm_ms_bias;
-    // printf("ch=%d, pwm=%lf\r\n",thrusters[i].channel, u-m_pwm_ms_bias);
+        float a = (thrusters[i].max_us - thrusters[i].min_us)/2.0;
+        float b = (thrusters[i].max_us + thrusters[i].min_us)/2.0;
+        //pwm = a *msg->data + b
+        // b= (min+max)/2
+        // a = (max-min)/2
+        double u = (a * msg->data + b)/1000.0 + m_pwm_ms_bias;
+        // printf("ch=%d, pwm=%lf\r\n",thrusters[i].channel, u-m_pwm_ms_bias);
 
-    pca.set_pwm_ms(thrusters[i].channel, u);
+        pca.set_pwm_ms(thrusters[i].channel, u);
     }
     else
     {
@@ -255,4 +278,35 @@ void PwmDriver::f_servo_callback(const std_msgs::msg::Float64::SharedPtr msg, in
         printf("input out of range\r\n");
     }
 
+}
+
+
+void PwmDriver::safety_check()
+{
+    if (this->get_clock()->now().seconds() - last_command_time_ > m_no_cmd_timeout)
+    {
+        // Set servos to neutral position
+        for (int i = 0; i < m_thruster_ch_list.size(); i++)
+        {
+            thruster_t t;
+            t.index = i;
+            t.channel = m_thruster_ch_list[i];
+            pca.set_pwm_ms(t.channel, m_thruster_init_us[i] / 1000.0 + m_pwm_ms_bias);
+        }
+        printf("No command timeout set to 0\n");
+    }
+}
+
+void PwmDriver::mcu_heartbeat()
+{
+    char heartbeat = 'H';
+    if (write(i2c_file_, &heartbeat, 1) != 1)
+    {
+        perror("Failed to write to the i2c bus");
+    }
+    else
+    {
+        printf("Heartbeat sent\n");
+    }
+    
 }

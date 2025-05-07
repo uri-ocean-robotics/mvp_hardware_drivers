@@ -68,6 +68,13 @@ class PwmDriver : public rclcpp::Node
         int i2c_file_;
 
         PCA9685 pca{};
+
+        double last_command_time_;
+        double m_no_cmd_timeout;
+        void safety_check();
+        void mcu_heartbeat();
+        rclcpp::TimerBase::SharedPtr safety_timer_;
+        rclcpp::TimerBase::SharedPtr heart_beat_timer;
 };
 
 
