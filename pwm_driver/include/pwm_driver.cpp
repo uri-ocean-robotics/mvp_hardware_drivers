@@ -119,8 +119,15 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
     this->declare_parameter("servo_center_us", m_servo_center_us);
     this->get_parameter("servo_center_us", m_servo_center_us);
     
-
-    
+    //Notify the MCU
+    printf("Wake up MCU\r\n");
+    mcu_heartbeat();
+    sleep(1);
+    heart_beat_timer = this->create_wall_timer(
+        std::chrono::milliseconds(500),
+        std::bind(&PwmDriver::mcu_heartbeat, this)
+        );
+    sleep(1);
 
     //declare subscriptions
     for (int i =0; i< (int)m_thruster_ch_list.size(); i++)
@@ -140,6 +147,7 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
         pca.set_pwm_ms(t.channel, m_thruster_init_us[i]/1000.00 + m_pwm_ms_bias);
         thrusters.push_back(t);
         sleep(1);
+        printf("Thruster: %s initialized\r\n", t.topic_name.c_str());
     }
 
     for (int i =0; i< (int)m_led_ch_list.size(); i++)
@@ -189,10 +197,7 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
         std::bind(&PwmDriver::safety_check, this)
       );
 
-    heart_beat_timer = this->create_wall_timer(
-    std::chrono::milliseconds(1000),
-    std::bind(&PwmDriver::mcu_heartbeat, this)
-    );
+
     rclcpp::on_shutdown(std::bind(&PwmDriver::onShutdown, this));
     RCLCPP_INFO(this->get_logger(), "PWM Channels initialization done, motor ready!");
     last_command_time_ = this->get_clock()->now().seconds();

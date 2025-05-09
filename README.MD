@@ -42,3 +42,7 @@ This repository has all the hardware drivers for the AUVs using mvp framework
     sudo udevadm control --reload-rules
     sudo udevadm trigger
     ```
+
+- MUC ATTINY85-20P Setup
+    - Add AttinyCore for wire.h
+    - Additional manager in preference http://drazzy.com/package_drazzy.com_index.json
