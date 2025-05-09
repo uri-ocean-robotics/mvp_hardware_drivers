@@ -185,7 +185,7 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
 
     //timer for safety check
     safety_timer_ = this->create_wall_timer(
-        std::chrono::milliseconds(500),
+        std::chrono::milliseconds(2000),
         std::bind(&PwmDriver::safety_check, this)
       );
 
@@ -293,7 +293,7 @@ void PwmDriver::safety_check()
             t.channel = m_thruster_ch_list[i];
             pca.set_pwm_ms(t.channel, m_thruster_init_us[i] / 1000.0 + m_pwm_ms_bias);
         }
-        printf("No command timeout set to 0\n");
+        // printf("No command timeout set to 0\n");
     }
 }
 
@@ -306,7 +306,7 @@ void PwmDriver::mcu_heartbeat()
     }
     else
     {
-        printf("Heartbeat sent\n");
+        // printf("Heartbeat sent\n");
     }
     
 }
