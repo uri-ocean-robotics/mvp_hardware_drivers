@@ -1,44 +1,4 @@
-[submodule "external/blueprint_oculus_sonar"]
-	path = external/blueprint_oculus_sonar
-	url = https://github.com/GSO-soslab/blueprint_oculus_sonar
-	branch = main
-[submodule "external/bluerobotics_ping360"]
-	path = external/bluerobotics_ping360
-	url = https://github.com/GSO-soslab/bluerobotics_ping360
-	branch = main
 [submodule "external/bluerobotics_pressure"]
 	path = external/bluerobotics_pressure
 	url = https://github.com/GSO-soslab/bluerobotics_pressure
-	branch = main
-[submodule "external/nucleus_driver"]
-	path = external/nucleus_driver
-	url = https://github.com/GSO-soslab/nucleus_driver
-	branch = noetic-devel
-[submodule "external/power_monitor"]
-	path = external/power_monitor
-	url = https://github.com/GSO-soslab/power_monitor
-	branch = main
-[submodule "external/uno_lqe"]
-	path = external/uno_lqe
-	url = https://github.com/GSO-soslab/uno_lqe
-	branch = master
-[submodule "external/waterlinked_dvl"]
-	path = external/waterlinked_dvl
-	url = https://github.com/uri-ocean-robotics/waterlinked_dvl
-	branch = master
-[submodule "external/science_sensor_drivers"]
-	path = external/science_sensor_drivers
-	url = https://github.com/GSO-soslab/science_sensor_drivers
-	branch = noetic-devel
-[submodule "external/Xsens_MTi_ROS_Driver_and_Ntrip_Client"]
-	path = external/Xsens_MTi_ROS_Driver_and_Ntrip_Client
-	url = https://github.com/GSO-soslab/Xsens_MTi_ROS_Driver_and_Ntrip_Client
-	branch = main
-[submodule "external/flir_camera_driver"]
-	path = external/flir_camera_driver
-	url = https://github.com/ros-drivers/flir_camera_driver
-	branch = noetic-devel
-[submodule "external/dwe_camera"]
-	path = external/dwe_camera
-	url = https://github.com/GSO-soslab/dwe_camera
-	branch = noetic-devel
+	branch = jazzy-devel
