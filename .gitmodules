@@ -10,3 +10,7 @@
 	path = external/waterlinked_dvl
 	url = https://github.com/uri-ocean-robotics/waterlinked_dvl
 	branch = jazzy-devel
+[submodule "external/bluerobotics_ping360"]
+	path = external/bluerobotics_ping360
+	url = https://github.com/GSO-soslab/bluerobotics_ping360
+	branch = jazzy-devel
