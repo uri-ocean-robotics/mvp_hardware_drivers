@@ -6,3 +6,7 @@
 	path = external/power_monitor
 	url = https://github.com/GSO-soslab/power_monitor
 	branch = jazzy-devel
+[submodule "external/waterlinked_dvl"]
+	path = external/waterlinked_dvl
+	url = https://github.com/uri-ocean-robotics/waterlinked_dvl
+	branch = jazzy-devel
