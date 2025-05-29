@@ -24,8 +24,8 @@ To control the Power source on the power distribution board.
 GPIOManager::GPIOManager(std::string name) : Node(name)
 {
     
-    this->declare_parameter("device_name", m_device_name);
-    this->get_parameter("device_name", m_device_name);
+    this->declare_parameter("gpio_devices", m_device_name);
+    this->get_parameter("gpio_devices", m_device_name);
 
     this->declare_parameter("wiringpi_gpio", m_gpio_id);
     this->get_parameter("wiringpi_gpio", m_gpio_id);
