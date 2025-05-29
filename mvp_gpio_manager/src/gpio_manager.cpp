@@ -39,7 +39,7 @@ GPIOManager::GPIOManager(std::string name) : Node(name)
         g.id = i;
         g.device_name = m_device_name[i];
         g.gpio_num = std::to_string(m_gpio_id[i]);
-        g.service_name = "gpio_manager/set_power_" + g.device_name;
+        g.service_name = "gpio_manager/set_power/" + g.device_name;
         printf("%s\r\n", g.service_name.c_str());
 
         
@@ -118,7 +118,7 @@ bool GPIOManager::f_cb_srv_get_state(
 
     for (int i=0; i<m_gpio_count; i++)
     {
-        msg = msg + "gpio_manager/set_power_"+ gpio_vector[i].device_name + "=" + std::to_string(gpio_vector[i].state) + "\r\n" ;
+        msg = msg + "gpio_manager/set_power/"+ gpio_vector[i].device_name + "=" + std::to_string(gpio_vector[i].state) + "\r\n" ;
     }
     response->success = 1;
     response->message = msg;
