@@ -52,6 +52,7 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
     std::vector<std::string> m_thruster_topic_list;
     std::vector<long int> m_thruster_min_us;
     std::vector<long int> m_thruster_max_us;
+    std::vector<long int> m_thruster_direction;
     
 
    
@@ -72,6 +73,9 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
 
     this->declare_parameter("thruster_init_us", m_thruster_init_us);
     this->get_parameter("thruster_init_us", m_thruster_init_us);
+
+    this->declare_parameter("thruster_direction", m_thruster_direction);
+    this->get_parameter("thruster_direction", m_thruster_direction);
 
     //led params
     std::vector<long int> m_led_ch_list;
@@ -138,6 +142,7 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
         t.topic_name =  m_thruster_topic_list[i];
         t.min_us = m_thruster_min_us[i];
         t.max_us = m_thruster_max_us[i];
+        t.direction = m_thruster_direction[i];
         t.sub_ = this->create_subscription<std_msgs::msg::Float64>(t.topic_name, 
                                                                    10, 
                                                                    [this, i](const std_msgs::msg::Float64::SharedPtr msg){
@@ -231,7 +236,7 @@ void PwmDriver::f_thruster_callback(const std_msgs::msg::Float64::SharedPtr msg,
         //pwm = a *msg->data + b
         // b= (min+max)/2
         // a = (max-min)/2
-        double u = (a * msg->data + b)/1000.0 + m_pwm_ms_bias;
+        double u = (a *thrusters[i].direction * msg->data + b)/1000.0 + m_pwm_ms_bias;
         // printf("ch=%d, pwm=%lf\r\n",thrusters[i].channel, u-m_pwm_ms_bias);
 
         pca.set_pwm_ms(thrusters[i].channel, u);

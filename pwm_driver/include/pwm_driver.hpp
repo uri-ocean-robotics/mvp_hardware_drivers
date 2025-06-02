@@ -30,6 +30,7 @@ class PwmDriver : public rclcpp::Node
             std::string topic_name;
             int min_us;
             int max_us;
+            int direction;
             rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr sub_;
         };
         std::vector<thruster_t> thrusters;
