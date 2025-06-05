@@ -18,3 +18,27 @@
 	path = external/dwe_camera
 	url = https://github.com/GSO-soslab/dwe_camera
 	branch = jazzy-devel
+[submodule "external/Xsens_MTi_ROS_Driver_and_Ntrip_Client"]
+	path = external/Xsens_MTi_ROS_Driver_and_Ntrip_Client
+	url = https://github.com/GSO-soslab/Xsens_MTi_ROS_Driver_and_Ntrip_Client
+	branch = ros2
+[submodule "external/wamv_rf_joy"]
+	path = external/wamv_rf_joy
+	url = https://github.com/GSO-soslab/wamv_rf_joy
+	branch = jazzy-devel
+[submodule "external/unicore_rtk_driver"]
+	path = external/unicore_rtk_driver
+	url = https://github.com/GSO-soslab/unicore_rtk_driver
+	branch = jazzy-devel
+[submodule "external/torqeedo_motor"]
+	path = external/torqeedo_motor
+	url = https://github.com/GSO-soslab/torqeedo_motor
+	branch = jazzy-devel
+[submodule "external/nortek_dvl_ethernet"]
+	path = external/nortek_dvl_ethernet
+	url = https://github.com/GSO-soslab/nortek_dvl_ethernet
+	branch = jazzy-devel
+[submodule "external/airmar_weatherstation"]
+	path = external/airmar_weatherstation
+	url = https://github.com/GSO-soslab/airmar_weatherstation
+	branch = jazzy-devel
