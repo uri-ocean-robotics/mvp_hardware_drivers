@@ -21,7 +21,7 @@
 [submodule "external/Xsens_MTi_ROS_Driver_and_Ntrip_Client"]
 	path = external/Xsens_MTi_ROS_Driver_and_Ntrip_Client
 	url = https://github.com/GSO-soslab/Xsens_MTi_ROS_Driver_and_Ntrip_Client
-	branch = ros2
+	branch = jazzy-devel
 [submodule "external/wamv_rf_joy"]
 	path = external/wamv_rf_joy
 	url = https://github.com/GSO-soslab/wamv_rf_joy
