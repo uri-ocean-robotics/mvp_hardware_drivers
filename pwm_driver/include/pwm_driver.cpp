@@ -26,11 +26,18 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
         perror("Failed to open the i2c bus");
         return;
     }
+
+    this->declare_parameter("mcu_installed", false);
+    this->get_parameter("mcu_installed", m_mcu_installed);
+
     //check MCU
-    if (ioctl(i2c_file_, I2C_SLAVE, ATTINY85_I2C_ADDRESS) < 0)
+    if(m_mcu_installed)
     {
-        perror("Failed to acquire bus access and/or talk to slave");
-        return;
+        if (ioctl(i2c_file_, I2C_SLAVE, ATTINY85_I2C_ADDRESS) < 0)
+        {
+            perror("Failed to acquire bus access and/or talk to slave");
+            return;
+        }
     }
 
 
@@ -124,14 +131,19 @@ PwmDriver::PwmDriver(std::string name) : Node(name)
     this->get_parameter("servo_center_us", m_servo_center_us);
     
     //Notify the MCU
-    printf("Wake up MCU\r\n");
-    mcu_heartbeat();
-    sleep(1);
-    heart_beat_timer = this->create_wall_timer(
-        std::chrono::milliseconds(500),
-        std::bind(&PwmDriver::mcu_heartbeat, this)
-        );
-    sleep(1);
+    if(m_mcu_installed)
+    {
+
+        printf("Wake up MCU\r\n");
+        mcu_heartbeat();
+        sleep(1);
+        heart_beat_timer = this->create_wall_timer(
+            std::chrono::milliseconds(500),
+            std::bind(&PwmDriver::mcu_heartbeat, this)
+            );
+        sleep(1);
+    }
+
 
     //declare subscriptions
     for (int i =0; i< (int)m_thruster_ch_list.size(); i++)

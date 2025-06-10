@@ -66,6 +66,8 @@ class PwmDriver : public rclcpp::Node
 
         std::vector<long int> m_thruster_init_us;
 
+        bool m_mcu_installed;
+
         int i2c_file_;
 
         PCA9685 pca{};

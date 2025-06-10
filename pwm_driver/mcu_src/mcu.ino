@@ -4,7 +4,7 @@
 
 int pwm_status;
 
-int heartbeatTimeout = 5000;
+int heartbeatTimeout = 10000;
 unsigned long lastHeartbeatTime;
 
 void setup() {
