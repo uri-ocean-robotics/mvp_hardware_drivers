@@ -42,3 +42,7 @@
 	path = external/airmar_weatherstation
 	url = https://github.com/GSO-soslab/airmar_weatherstation
 	branch = jazzy-devel
+[submodule "external/roboclaw_motor"]
+	path = external/roboclaw_motor
+	url = https://github.com/GSO-soslab/roboclaw_motor
+	branch = jazzy-devel
