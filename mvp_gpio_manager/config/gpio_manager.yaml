@@ -2,4 +2,4 @@
   ros__parameters:
     gpio_devices: [payload_24v, regular_payload, jetson]
     #Wring PI GPIO number
-    wiringpi_gpio: [13, 12, 11]
+    wiringpi_gpio: [13, 12, 14]

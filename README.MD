@@ -6,7 +6,7 @@ This repository has all the hardware drivers for the AUVs using mvp framework
  sudo apt-get install libi2c-dev
  ```
 
-- GPIO setup using wiringPi
+- GPIO setup using wiringPi [PI4]
     - Go to wiringPi github [link](https://github.com/WiringPi/WiringPi?tab=readme-ov-file)
     - Following their installation steps to get the newest wiring Pi.
 
@@ -42,9 +42,14 @@ This repository has all the hardware drivers for the AUVs using mvp framework
     sudo udevadm control --reload-rules
     sudo udevadm trigger
     ```
-- New GPIO libary
- ```sudo apt install python3-rpi-lgpio```
 
+- GPIO Permission setup with PI5
+    - replace `gpiomem` with `gpiomem0` in the above steps
+
+- New GPIO libary for PI5
+ ```sudo apt install python3-rpi-lgpio```
+  - Dropweight scritp GPIO chip in PI5 is `gpiochip4` instead of `gpiochip0`
+  
 - MUC ATTINY85-20P Setup
     - Add AttinyCore for wire.h
     - Additional manager in preference http://drazzy.com/package_drazzy.com_index.json
