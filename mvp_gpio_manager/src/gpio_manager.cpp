@@ -76,9 +76,11 @@ bool GPIOManager::f_initialize_gpio()
 //     // for each gpio we do the following
     for (int i=0; i<m_gpio_count; i++)
     {
-       pinMode(m_gpio_id[i],OUTPUT);
-       digitalWrite(m_gpio_id[i],LOW);
-       gpio_vector[i].state = 0;
+        int current_state = digitalRead(m_gpio_id[i]);  // Read current output level
+        gpio_vector[i].state = current_state;
+        pinMode(m_gpio_id[i],OUTPUT);
+        digitalWrite(m_gpio_id[i], current_state);
+        // gpio_vector[i].state = 0;
     }
 
     return true;
