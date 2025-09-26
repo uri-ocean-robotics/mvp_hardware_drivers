@@ -42,3 +42,7 @@
 	path = external/roboclaw_motor
 	url = https://github.com/GSO-soslab/roboclaw_motor
 	branch = jazzy-devel
+[submodule "external/nucleus_driver"]
+	path = external/nucleus_driver
+	url = https://github.com/GSO-soslab/nucleus_driver
+	branch = jazzy-devel
