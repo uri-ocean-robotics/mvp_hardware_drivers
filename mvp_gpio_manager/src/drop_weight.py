@@ -9,7 +9,7 @@ DROPWEIGHT = 11
 STROBE = 12
 
 # open the gpio chip and set the LED pin as output
-h = lgpio.gpiochip_open(0)
+h = lgpio.gpiochip_open(4)
 lgpio.gpio_claim_output(h, DROPWEIGHT)
 lgpio.gpio_claim_output(h, STROBE)
 
