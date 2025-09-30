@@ -47,6 +47,3 @@
 	url = https://github.com/GSO-soslab/nucleus_driver
 	branch = jazzy-devel
 
-[submodule "external/microstrain_inertial"]
-	path = external/microstrain_inertial
-	url = https://github.com/LORD-MicroStrain/microstrain_inertial
