@@ -54,3 +54,7 @@
 	path = external/blueprint_oculus_sonar
 	url = https://github.com/GSO-soslab/blueprint_oculus_sonar
 	branch = jazzy-devel
+[submodule "external/cerulean_sonar_mbes"]
+	path = external/cerulean_sonar_mbes
+	url = https://github.com/GSO-soslab/cerulean_surveyor_mbes
+	branch = main

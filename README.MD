@@ -48,8 +48,49 @@ This repository has all the hardware drivers for the AUVs using mvp framework
 
 - New GPIO libary for PI5
  ```sudo apt install python3-rpi-lgpio```
-  - Dropweight scritp GPIO chip in PI5 is `gpiochip4` instead of `gpiochip0`
+  - Dropweight script GPIO chip in PI5 is `gpiochip4` instead of `gpiochip0`
   
 - MUC ATTINY85-20P Setup
     - Add AttinyCore for wire.h
     - Additional manager in preference http://drazzy.com/package_drazzy.com_index.json
+
+### systemd service for Dropweight & Strobe 
+The dropweight & strobe functionality is a [script](./mvp_gpio_manager/src/drop_weight.py) that runs as a systemd service.<br>
+1. Create a new service :
+```sudo nano /etc/systemd/system/dropweight.service```
+2. Paste the following into the ```dropweight.service``` file:
+```
+[Unit]
+Description=Dropweight GPIO Controller
+DefaultDependencies=no
+After=local-fs.target
+Before=shutdown.target
+Conflicts=shutdown.target
+Requires=dev-gpiochip4.device
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 <path_to_script>
+Restart=no
+RestartPreventExitStatus=0
+RestartSec=2
+KillSignal=SIGTERM
+TimeoutStopSec=10
+
+SendSIGKILL=no
+# Security / sandboxing (optional)
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+```
+
+3. ```sudo systemctl daemon-reload```
+4. ```sudo systemctl enable dropweight.service```
+5. ```sudo systemctl start dropweight.service```
+6. Verify by ```sudo systemctl status dropweight.service``` 
